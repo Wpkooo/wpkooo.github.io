@@ -1,0 +1,27 @@
+name: 抓取每日名言
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天凌晨 0 点自动执行
+  workflow_dispatch:      # 也可以手动点一下执行
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 安装抓取依赖
+        run: sudo apt-get install -y curl
+        
+      - name: 抓取名言并保存
+        run: |
+          # 这里调用你的接口，把返回内容存到 quote.txt
+          curl -s "http://123.207.6.187/get.php?code=250722-136823478060658" > quote.txt
+          
+      - name: 提交到仓库
+        run: |
+          git config --local user.email "github-actions@example.com"
+          git config --local user.name "GitHub Actions"
+          git add quote.txt
+          git commit -m "更新今日名言 [自动提交]" || exit 0
+          git push
