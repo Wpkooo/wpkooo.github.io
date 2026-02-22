@@ -2,17 +2,16 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>7y 的 MC 专属主页</title>
-<!-- MC末影水晶动态图标 -->
-<link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif?2fae1" type="image/x-icon">
+<title>7y</title>
+<link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif" type="image/gif">
 <style>
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
+
   body {
-    /* 你的专属背景图 */
     background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center center fixed;
     background-size: cover;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -21,7 +20,16 @@
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: breathBg 8s ease-in-out infinite alternate;
   }
+
+  @keyframes breathBg {
+    0% { filter: brightness(1); }
+    100% { filter: brightness(1.15); }
+  }
+
   body::before {
     content: "";
     position: fixed;
@@ -29,21 +37,47 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0,0,0,0.3);
     z-index: -1;
   }
+
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: starFall linear infinite;
+  }
+
+  @keyframes starFall {
+    0% { transform: translateY(-10px); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+
   .container {
     width: 100%;
     max-width: 480px;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255,255,255,0.92);
     padding: 40px 35px;
-    border-radius: 12px;
-    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    animation: floatCard 4s ease-in-out infinite alternate;
+    position: relative;
+    z-index: 2;
   }
+
+  @keyframes floatCard {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-8px); }
+  }
+
   .lang-switch {
     text-align: center;
     margin-bottom: 20px;
   }
+
   .lang-btn {
     padding: 6px 10px;
     margin: 0 4px;
@@ -51,81 +85,98 @@
     border-radius: 6px;
     background: #eee;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: 0.2s;
   }
+
   .lang-btn.active {
     background: #0071e3;
     color: white;
   }
-  .lang-btn:hover {
-    background: #ddd;
-  }
+
   .content {
     display: none;
+    opacity: 0;
+    transform: translateY(10px);
   }
+
   .content.active {
     display: block;
+    animation: fadeIn 1s ease-out forwards;
   }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   h1 {
     font-size: 26px;
-    color: #222;
-    margin-bottom: 10px;
     text-align: center;
+    margin-bottom: 8px;
   }
+
   .nickname {
     font-size: 18px;
     color: #0071e3;
     font-weight: bold;
-    margin-bottom: 15px;
     text-align: center;
+    margin-bottom: 18px;
   }
-  /* 名言模块样式 */
-  .quote-box {
-    background: linear-gradient(135deg, #fdf2f8 0%, #fef7fb 100%);
-    padding: 15px;
+
+  .quote-box, .account-box {
+    position: relative;
+    padding: 16px;
     border-radius: 10px;
-    margin: 10px 0;
+    margin: 12px 0;
     text-align: center;
-    font-style: italic;
-    color: #2d3748;
-    border: 2px solid #9f7aea;
-    font-size: 14px;
-    line-height: 1.6;
+    overflow: hidden;
   }
-  .quote-title {
+
+  .quote-box {
+    background: #fdf2f8;
+    border: 2px solid #a78bfa;
+  }
+
+  .account-box {
+    background: #e8f4f8;
+    border: 2px solid #3b82f6;
+    font-family: monospace;
+  }
+
+  .quote-box::after, .account-box::after {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    background-size: 400% 400%;
+    border-radius: 12px;
+    z-index: -1;
+    animation: borderGlow 4s linear infinite;
+    filter: blur(4px);
+  }
+
+  .account-box::after {
+    background: linear-gradient(45deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6);
+  }
+
+  @keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .box-title {
     font-size: 13px;
-    color: #718096;
+    color: #666;
     margin-bottom: 6px;
     font-weight: bold;
-    font-style: normal;
   }
-  /* MC账号模块样式 */
-  .account-box {
-    background: linear-gradient(135deg, #e8f4f8 0%, #f0f8fb 100%);
-    padding: 18px;
-    border-radius: 10px;
-    margin: 15px 0;
-    text-align: center;
-    color: #2d3748;
-    border: 2px solid #4299e1;
-    font-family: Consolas, monospace;
-    font-size: 15px;
-    line-height: 1.6;
-  }
-  .account-title {
-    font-size: 14px;
-    color: #718096;
-    margin-bottom: 8px;
-    font-weight: bold;
-    font-family: sans-serif;
-  }
+
   .item {
-    font-size: 16px;
-    color: #333;
-    line-height: 1.8;
-    margin: 8px 0;
     text-align: center;
+    margin: 6px 0;
+    font-size: 15px;
   }
+
   .link-btn {
     display: block;
     margin-top: 12px;
@@ -135,154 +186,158 @@
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
   }
+
+  .link-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: 0.5s;
+  }
+
+  .link-btn:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
   .link-btn:hover {
     transform: scale(1.03);
-    opacity: 0.95;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
   }
+
   .bilibili { background: #FB7299; }
   .namemc   { background: #4DDB9F; }
   .youtube  { background: #FF0000; }
   .discord  { background: #5865F2; }
+
   .visitor-count {
-    margin-top: 20px;
     text-align: center;
+    margin-top: 20px;
     font-size: 14px;
-    color: #555;
+    color: #666;
   }
 </style>
 </head>
 
 <body>
-<div class="container">
-  <div class="lang-switch">
-    <button class="lang-btn" onclick="changeLang('cn')">简体</button>
-    <button class="lang-btn" onclick="changeLang('tw')">繁體</button>
-    <button class="lang-btn" onclick="changeLang('en')">English</button>
+  <div class="container">
+    <div class="lang-switch">
+      <button class="lang-btn" onclick="show('cn')">简体</button>
+      <button class="lang-btn" onclick="show('tw')">繁體</button>
+      <button class="lang-btn" onclick="show('en')">English</button>
+    </div>
+
+    <div class="content active" id="cn">
+      <h1>个人主页</h1>
+      <div class="nickname">7y</div>
+      <div class="quote-box">
+        <div class="box-title">今日名言</div>
+        <div id="q_cn">加载中...</div>
+      </div>
+      <div class="account-box">
+        <div class="box-title">今日 MC 账号</div>
+        <div id="a_cn">获取中...</div>
+      </div>
+      <div class="item">喜欢编程、麦块</div>
+      <div class="item">正在学习更多技术</div>
+    </div>
+
+    <div class="content" id="tw">
+      <h1>個人主頁</h1>
+      <div class="nickname">7y</div>
+      <div class="quote-box">
+        <div class="box-title">今日名言</div>
+        <div id="q_tw">加載中...</div>
+      </div>
+      <div class="account-box">
+        <div class="box-title">今日 MC 賬號</div>
+        <div id="a_tw">獲取中...</div>
+      </div>
+      <div class="item">喜歡程式、麥塊</div>
+      <div class="item">正在學習更多技術</div>
+    </div>
+
+    <div class="content" id="en">
+      <h1>Profile</h1>
+      <div class="nickname">7y</div>
+      <div class="quote-box">
+        <div class="box-title">Today's Quote</div>
+        <div id="q_en">Loading...</div>
+      </div>
+      <div class="account-box">
+        <div class="box-title">Today's MC Account</div>
+        <div id="a_en">Fetching...</div>
+      </div>
+      <div class="item">I love coding & Minecraft</div>
+      <div class="item">Learning new skills</div>
+    </div>
+
+    <a href="https://space.bilibili.com/1247576850" class="link-btn bilibili" target="_blank">Bilibili</a>
+    <a href="https://zh-cn.namemc.com/profile/Xooo777yoooX.1" class="link-btn namemc" target="_blank">Namemc</a>
+    <a href="https://www.youtube.com/channel/UCf2P1XYSConYpQ5TpDTB5NA" class="link-btn youtube" target="_blank">Youtube</a>
+    <a href="https://discord.gg/BRZnvkqZKw" class="link-btn discord" target="_blank">Discord</a>
+
+    <div class="visitor-count">
+      本站访问量: <img src="https://profile-counter.glitch.me/wpkooo/count.svg" alt="访问量">
+    </div>
   </div>
 
-  <!-- 简体 -->
-  <div class="content active" id="cn">
-    <h1>个人主页</h1>
-    <div class="nickname">7y</div>
-    
-    <!-- 每日名言 -->
-    <div class="quote-box">
-      <div class="quote-title">今日名言</div>
-      <div id="quote-content">加载中...</div>
-    </div>
+  <script>
+    function show(lang) {
+      document.querySelectorAll('.content').forEach(e => e.classList.remove('active'));
+      document.querySelectorAll('.lang-btn').forEach(e => e.classList.remove('active'));
+      document.getElementById(lang).classList.add('active');
+      document.querySelectorAll('.lang-btn')[lang=='cn'?0:lang=='tw'?1:2].classList.add('active');
+    }
 
-    <!-- MC账号 -->
-    <div class="account-box">
-      <div class="account-title">今日 MC 账号（自动刷新）</div>
-      <div id="account-content">正在获取账号...</div>
-    </div>
+    function loadQuote() {
+      fetch('https://v1.hitokoto.cn')
+        .then(r=>r.json())
+        .then(d=>{
+          let t = `"${d.hitokoto}" —— ${d.from||'未知'}`;
+          document.getElementById('q_cn').innerText = t;
+          document.getElementById('q_tw').innerText = t;
+          document.getElementById('q_en').innerText = d.hitokoto;
+        })
+    }
 
-    <div class="item">喜欢编程、麦块</div>
-    <div class="item">正在学习更多技术</div>
-  </div>
+    function loadAccount() {
+      let url = 'https://api.allorigins.win/get?url=' + encodeURIComponent('http://123.207.6.187/get.php?code=250722-136823478060658');
+      fetch(url)
+        .then(r=>r.json())
+        .then(d=>{
+          let txt = d.contents || '获取失败';
+          document.getElementById('a_cn').innerText = txt;
+          document.getElementById('a_tw').innerText = txt;
+          document.getElementById('a_en').innerText = txt;
+        })
+    }
 
-  <!-- 繁体 -->
-  <div class="content" id="tw">
-    <h1>個人主頁</h1>
-    <div class="nickname">7y</div>
-    <div class="quote-box">
-      <div class="quote-title">今日名言</div>
-      <div id="quote-content-tw">加載中...</div>
-    </div>
-    <div class="account-box">
-      <div class="account-title">今日 MC 賬號（自動刷新）</div>
-      <div id="account-content-tw">正在獲取賬號...</div>
-    </div>
-    <div class="item">喜歡程式、麥塊</div>
-    <div class="item">正在學習更多技術</div>
-  </div>
+    function createStars() {
+      for(let i=0;i<30;i++){
+        let s = document.createElement('div');
+        s.classList.add('star');
+        let size = Math.random()*2+1;
+        s.style.width = size+'px';
+        s.style.height = size+'px';
+        s.style.left = Math.random()*100+'%';
+        s.style.animationDuration = (Math.random()*10+10)+'s';
+        s.style.animationDelay = Math.random()*10+'s';
+        document.body.appendChild(s);
+      }
+    }
 
-  <!-- English -->
-  <div class="content" id="en">
-    <h1>Profile</h1>
-    <div class="nickname">7y</div>
-    <div class="quote-box">
-      <div class="quote-title">Today's Quote</div>
-      <div id="quote-content-en">Loading...</div>
-    </div>
-    <div class="account-box">
-      <div class="account-title">Today's MC Account (Auto Refresh)</div>
-      <div id="account-content-en">Fetching account...</div>
-    </div>
-    <div class="item">I love coding & Minecraft</div>
-    <div class="item">Learning new skills</div>
-  </div>
-
-  <!-- 平台链接 -->
-  <a href="https://space.bilibili.com/1247576850?spm_id_from=333.337.search-card.all.click" class="link-btn bilibili" target="_blank">Bilibili</a>
-  <a href="https://zh-cn.namemc.com/profile/Xooo777yoooX.1" class="link-btn namemc" target="_blank">Namemc</a>
-  <a href="https://www.youtube.com/channel/UCf2P1XYSConYpQ5TpDTB5NA" class="link-btn youtube" target="_blank">Youtube</a>
-  <a href="https://discord.gg/BRZnvkqZKw" class="link-btn discord" target="_blank">Discord</a>
-
-  <!-- 访问量 -->
-  <div class="visitor-count">
-    本站访问量: <img src="https://profile-counter.glitch.me/wpkooo/count.svg" alt="访问量">
-  </div>
-</div>
-
-<script>
-  // 语言切换逻辑
-  function changeLang(lang) {
-    showLang(lang);
-  }
-  function showLang(lang) {
-    document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.lang-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById(lang).classList.add('active');
-    document.querySelector(`.lang-btn:nth-child(${lang === 'cn' ? 1 : lang === 'tw' ? 2 : 3})`).classList.add('active');
-  }
-
-  // ========== 1. 加载每日名言（公开API，稳定） ==========
-  function loadQuote() {
-    fetch('https://v1.hitokoto.cn/')
-      .then(response => response.json())
-      .then(data => {
-        const quoteText = `"${data.hitokoto}" —— ${data.from || '未知作者'}`;
-        document.getElementById('quote-content').textContent = quoteText;
-        document.getElementById('quote-content-tw').textContent = quoteText;
-        document.getElementById('quote-content-en').textContent = `"${data.hitokoto}" —— ${data.from || 'Unknown Author'}`;
-      })
-      .catch(err => {
-        document.getElementById('quote-content').textContent = "名言加载失败 😜";
-        document.getElementById('quote-content-tw').textContent = "名言加載失敗 😜";
-        document.getElementById('quote-content-en').textContent = "Quote loading failed 😜";
-      });
-  }
-
-  // ========== 2. 加载MC账号（跨域代理，解决访问限制） ==========
-  function loadAccount() {
-    // 你的账号接口 + 免费跨域代理
-    const accountUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('http://123.207.6.187/get.php?code=250722-136823478060658');
-    
-    fetch(accountUrl)
-      .then(response => response.json())
-      .then(data => {
-        const accountText = data.contents || '暂无账号';
-        document.getElementById('account-content').textContent = accountText;
-        document.getElementById('account-content-tw').textContent = accountText;
-        document.getElementById('account-content-en').textContent = accountText || 'No account available';
-      })
-      .catch(err => {
-        document.getElementById('account-content').textContent = "账号获取失败 🥺";
-        document.getElementById('account-content-tw').textContent = "賬號獲取失敗 🥺";
-        document.getElementById('account-content-en').textContent = "Account fetch failed 🥺";
-      });
-  }
-
-  // 页面加载完成后，同时加载名言和账号
-  document.addEventListener('DOMContentLoaded', function() {
-    loadQuote();
-    loadAccount();
-  });
-</script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+      createStars();
+      loadQuote();
+      loadAccount();
+    });
+  </script>
 </body>
 </html>
