@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Profile</title>
-<!-- 加了网页小图标，地址栏会显示 -->
+<!-- MC末影水晶动态图标 -->
 <link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif?2fae1" type="image/x-icon">
 <style>
   * {
@@ -12,7 +12,9 @@
     box-sizing: border-box;
   }
   body {
-    background: #f7f8fa;
+    /* 使用你的樱花林截图作为背景 */
+    background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center center fixed;
+    background-size: cover; /* 全屏覆盖 */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     display: flex;
     justify-content: center;
@@ -20,13 +22,24 @@
     min-height: 100vh;
     padding: 20px;
   }
+  /* 黑色半透明遮罩，让文字更清晰 */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* 透明度可调整，0.3最合适 */
+    z-index: -1;
+  }
   .container {
     width: 100%;
     max-width: 480px;
-    background: white;
+    background: rgba(255, 255, 255, 0.9); /* 卡片稍微透明，透出背景 */
     padding: 40px 35px;
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
   .lang-switch {
     text-align: center;
@@ -39,10 +52,14 @@
     border-radius: 6px;
     background: #eee;
     cursor: pointer;
+    transition: all 0.2s ease;
   }
   .lang-btn.active {
     background: #0071e3;
     color: white;
+  }
+  .lang-btn:hover {
+    background: #ddd;
   }
   .content {
     display: none;
@@ -56,7 +73,6 @@
     margin-bottom: 20px;
     text-align: center;
   }
-  /* 网名样式：蓝色加粗，显眼不花哨 */
   .nickname {
     font-size: 18px;
     color: #0071e3;
@@ -66,7 +82,7 @@
   }
   .item {
     font-size: 16px;
-    color: #444;
+    color: #333; /* 加深文字颜色，提高可读性 */
     line-height: 1.8;
     margin: 8px 0;
     text-align: center;
@@ -80,11 +96,26 @@
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
+    transition: all 0.2s ease;
+    border: 2px solid transparent; /* 防止放大时抖动 */
+  }
+  /* 鼠标hover效果：轻微放大+发光边框 */
+  .link-btn:hover {
+    transform: scale(1.03);
+    opacity: 0.95;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
   }
   .bilibili { background: #FB7299; }
   .namemc   { background: #4DDB9F; }
   .youtube  { background: #FF0000; }
   .discord  { background: #5865F2; }
+  /* 访问量统计 */
+  .visitor-count {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+  }
 </style>
 </head>
 
@@ -100,7 +131,7 @@
   <!-- 简体 -->
   <div class="content" id="cn">
     <h1>个人主页</h1>
-    <div class="nickname">7y</div> <!-- 这里改网名 -->
+    <div class="nickname">7y</div>
     <div class="item">喜欢编程、麦块</div>
     <div class="item">正在学习更多技术</div>
   </div>
@@ -108,7 +139,7 @@
   <!-- 繁体 -->
   <div class="content" id="tw">
     <h1>個人主頁</h1>
-    <div class="nickname">7y</div> <!-- 这里改网名 -->
+    <div class="nickname">7y</div>
     <div class="item">喜歡程式、麥塊</div>
     <div class="item">正在學習更多技術</div>
   </div>
@@ -116,15 +147,21 @@
   <!-- English -->
   <div class="content" id="en">
     <h1>Profile</h1>
-    <div class="nickname">7y</div> <!-- 这里改英文网名 -->
+    <div class="nickname">7y</div>
     <div class="item">I love coding & Minecraft</div>
     <div class="item">Learning new skills</div>
   </div>
 
+  <!-- 链接 -->
   <a href="https://space.bilibili.com/1247576850?spm_id_from=333.337.search-card.all.click" class="link-btn bilibili" target="_blank">Bilibili</a>
   <a href="https://zh-cn.namemc.com/profile/Xooo777yoooX.1" class="link-btn namemc" target="_blank">Namemc</a>
   <a href="https://www.youtube.com/channel/UCf2P1XYSConYpQ5TpDTB5NA" class="link-btn youtube" target="_blank">Youtube</a>
   <a href="https://discord.gg/BRZnvkqZKw" class="link-btn discord" target="_blank">Discord</a>
+
+  <!-- 访问量 -->
+  <div class="visitor-count">
+    本站访问量: <img src="https://profile-counter.glitch.me/wpkooo/count.svg" alt="访问量">
+  </div>
 
 </div>
 
