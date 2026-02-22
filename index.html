@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>7y</title>
+<title>7y 的 MC 专属主页</title>
 <link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif" type="image/gif">
 <style>
   * {
@@ -290,7 +290,7 @@
 
 <div class="container" id="main-card">
   <div class="lang-switch">
-    <button class="lang-btn" onclick="show('cn')">简体</button>
+    <button class="lang-btn active" onclick="show('cn')">简体</button>
     <button class="lang-btn" onclick="show('tw')">繁體</button>
     <button class="lang-btn" onclick="show('en')">English</button>
   </div>
@@ -351,7 +351,7 @@
 </div>
 
 <script>
-  // 雪花
+  // 雪花核心功能
   let snowLevel = 'small';
   let snows = [];
   function clearSnows() { snows.forEach(s => s.remove()); snows = []; }
@@ -385,7 +385,7 @@
     }
   }
 
-  // 音乐
+  // 本地音乐播放器核心
   const audio = new Audio();
   let playing = false;
   document.getElementById('file').addEventListener('change', e => {
@@ -416,21 +416,17 @@
     document.querySelector('.play-btn').textContent = '播放';
   });
 
-  // 语言切换 + 震动
+  // 语言切换 + 震动特效
   function show(lang) {
     document.querySelectorAll('.content').forEach(x => x.classList.remove('active'));
     document.querySelectorAll('.lang-btn').forEach(x => x.classList.remove('active'));
     document.getElementById(lang).classList.add('active');
     document.querySelectorAll('.lang-btn')[lang === 'cn' ? 0 : lang === 'tw' ? 1 : 2].classList.add('active');
-    
-    // 震动特效
     document.querySelector('.container').classList.add('shake');
-    setTimeout(() => {
-      document.querySelector('.container').classList.remove('shake');
-    }, 300);
+    setTimeout(() => document.querySelector('.container').classList.remove('shake'), 300);
   }
 
-  // 名言 & 账号
+  // 名言 & MC账号加载
   function loadQuote() {
     fetch('https://v1.hitokoto.cn')
       .then(r => r.json())
@@ -453,46 +449,26 @@
       });
   }
 
-  // 彩蛋：双击召唤末影龙
+  // 末影龙彩蛋
   let doubleClickTimer = null;
   document.getElementById('main-card').addEventListener('click', () => {
-    // 显示彩蛋提示（3秒后消失）
     document.querySelector('.easter-egg-tip').style.opacity = 1;
-    setTimeout(() => {
-      document.querySelector('.easter-egg-tip').style.opacity = 0;
-    }, 3000);
-
-    // 双击检测
+    setTimeout(() => document.querySelector('.easter-egg-tip').style.opacity = 0, 3000);
     if (doubleClickTimer) {
       clearTimeout(doubleClickTimer);
       doubleClickTimer = null;
-      
-      // 召唤末影龙
-      summonEnderDragon();
+      const dragon = document.createElement('div');
+      dragon.classList.add('enderdragon');
+      document.body.appendChild(dragon);
+      const roar = new Audio('https://assets.mojang.com/sounds/minecraft/sounds/mob/enderdragon/growl1.ogg');
+      roar.volume = 0.5; roar.play();
+      setTimeout(() => dragon.remove(), 8000);
     } else {
-      doubleClickTimer = setTimeout(() => {
-        doubleClickTimer = null;
-      }, 300);
+      doubleClickTimer = setTimeout(() => doubleClickTimer = null, 300);
     }
   });
 
-  function summonEnderDragon() {
-    // 创建末影龙元素
-    const dragon = document.createElement('div');
-    dragon.classList.add('enderdragon');
-    document.body.appendChild(dragon);
-
-    // 播放龙吼音效（可选）
-    const roar = new Audio('https://assets.mojang.com/sounds/minecraft/sounds/mob/enderdragon/growl1.ogg');
-    roar.volume = 0.5;
-    roar.play();
-
-    // 8秒后移除龙元素
-    setTimeout(() => {
-      dragon.remove();
-    }, 8000);
-  }
-
+  // 页面初始化
   document.addEventListener('DOMContentLoaded', () => {
     makeSnow();
     loadQuote();
