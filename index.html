@@ -5,268 +5,120 @@
 <title>7y</title>
 <link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif" type="image/gif">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* 背景切换容器 */
+  .bg-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center/cover;
+    transition: background-image 1s ease-in-out;
+    z-index: -2;
+  }
+  .bg-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3); z-index: -1;
   }
 
   body {
-    background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center center fixed;
-    background-size: cover;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    animation: breathBg 8s ease-in-out infinite alternate;
+    display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;
+    position: relative; overflow: hidden;
   }
 
-  @keyframes breathBg {
-    0% { filter: brightness(1); }
-    100% { filter: brightness(1.15); }
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.3);
-    z-index: -1;
-  }
-
-  /* 极光天幕 */
+  /* 极光 */
   .aurora {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 35vh;
+    position: fixed; top: 0; left: 0; width: 100%; height: 35vh;
     background: linear-gradient(90deg, #ff0084, #00ffff, #ff00ff, #00ff88);
-    opacity: 0.15;
-    filter: blur(60px);
-    z-index: -1;
+    opacity: 0.15; filter: blur(60px); z-index: 1;
     animation: aurora 18s linear infinite;
   }
-  @keyframes aurora {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
+  @keyframes aurora { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-  /* 雪花：顶端斜向密集 */
+  /* 雪花 */
   .snowflake {
-    position: fixed;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.85;
-    z-index: 1;
-    pointer-events: none;
-    top: -10px;
+    position: fixed; background: white; border-radius: 50%; opacity: 0.85;
+    pointer-events: none; top: -10px; z-index: 2;
   }
   @keyframes snowfall {
     0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-    5% { opacity: 1; }
-    95% { opacity: 1; }
+    5% { opacity: 1; } 95% { opacity: 1; }
     100% { transform: translate(calc(var(--sway)*1px), 100vh) rotate(360deg); opacity: 0; }
   }
 
-  .snow-control {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 999;
-    display: flex;
-    gap: 8px;
-  }
-  .snow-btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 0;
-    background: rgba(255,255,255,0.85);
-    color: #333;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 2px 2px 0 #ccc;
-  }
-  .snow-btn:hover { background: #fff; }
+  .snow-control { position: fixed; top: 20px; right: 20px; z-index: 999; display: flex; gap: 8px; }
+  .snow-btn { padding: 6px 12px; border: none; border-radius: 0; background: rgba(255,255,255,0.85);
+    color: #333; cursor: pointer; box-shadow: 2px 2px 0 #ccc; transition: .2s; }
   .snow-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
 
-  /* 音乐播放器：左下角方正 */
-  .music-player {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 320px;
-    background: rgba(255,255,255,0.9);
-    border-radius: 0;
-    padding: 12px 16px;
-    z-index: 999;
-    box-shadow: 3px 3px 0 #ccc;
-    border: 1px solid #ddd;
-  }
-  .music-player h4 { font-size: 14px; margin-bottom: 8px; text-align: center; color: #333; font-weight: 600; }
-  .music-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  /* 音乐播放器 */
+  .music-player { position: fixed; bottom: 20px; left: 20px; width: 320px; background: rgba(255,255,255,0.9);
+    border-radius: 0; padding: 12px 16px; z-index: 999; box-shadow: 3px 3px 0 #ccc; border: 1px solid #ddd; }
+  .music-player h4 { font-size: 14px; text-align: center; margin-bottom: 8px; font-weight: 600; }
+  .music-controls { display: flex; gap: 8px; margin-bottom: 8px; }
   .file-input { flex: 1; font-size: 12px; border-radius: 0; border: 1px solid #ddd; padding: 4px; }
   .play-btn { padding: 6px 10px; border: none; border-radius: 0; background: #0071e3; color: white; cursor: pointer; box-shadow: 2px 2px 0 #005cc8; }
   .progress { width: 100%; height: 6px; appearance: none; border-radius: 0; background: #ddd; margin-bottom: 6px; border: 1px solid #ccc; }
   .progress::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; border-radius: 0; background: #0071e3; border: 1px solid #005cc8; }
   .volume { width: 80px; border-radius: 0; }
 
-  /* 卡片：文字炸裂 + 震动 + 银河旋转感 */
-  .container {
-    width: 100%;
-    max-width: 480px;
-    background: rgba(255,255,255,0.92);
-    padding: 40px 35px;
-    border-radius: 0;
-    box-shadow: 5px 5px 0 rgba(0,0,0,0.2);
-    animation: floatCard 4s ease-in-out infinite alternate;
-    position: relative;
-    z-index: 2;
-    border: 1px solid #eee;
-  }
-  @keyframes floatCard { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
+  /* 新增：背景音按钮 */
+  .bg-music-btn { position: fixed; bottom: 80px; left: 20px; padding: 6px 10px; border: none; border-radius: 0;
+    background: rgba(0,0,0,0.6); color: #00ff00; cursor: pointer; z-index: 999; box-shadow: 2px 2px 0 #005cc8; }
 
-  /* 震动特效 */
-  @keyframes shake { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2px, 2px); } 50% { transform: translate(2px, -2px); } 75% { transform: translate(-2px, -2px); } }
+  /* 新增：实时时钟 */
+  .digital-clock { position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.5); color: #00ff00;
+    font-family: 'Courier New', monospace; padding: 8px 12px; border-radius: 0; z-index: 999; font-size: 14px; border: 1px solid #00ff00; }
+
+  /* 卡片 */
+  .container { width: 100%; max-width: 480px; background: rgba(255,255,255,0.92); padding: 40px 35px; border-radius: 0;
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.2); position: relative; z-index: 2; border: 1px solid #eee;
+    transition: filter 0.5s ease; /* 景深过渡 */ }
+  .bg-blur .container { filter: blur(5px); } /* 景深效果 */
+
+  @keyframes floatCard { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
   .shake { animation: shake 0.3s; }
+  @keyframes shake { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2px, 2px); } 50% { transform: translate(2px, -2px); } 75% { transform: translate(-2px, -2px); } }
 
   .lang-switch { text-align: center; margin-bottom: 20px; }
-  .lang-btn { padding: 6px 10px; margin: 0 4px; border: none; border-radius: 0; background: #eee; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #ddd; }
+  .lang-btn { padding: 6px 10px; margin: 0 4px; border: none; border-radius: 0; background: #eee; cursor: pointer; box-shadow: 2px 2px 0 #ddd; }
   .lang-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
 
   /* 文字炸裂 */
   .content { display: none; opacity: 0; transform: scale(0.8) translateY(30px); }
   .content.active { display: block; animation: explodeIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-  @keyframes explodeIn {
-    0% { opacity: 0; transform: scale(0.8) translateY(30px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
-  }
+  @keyframes explodeIn { 0% { opacity: 0; transform: scale(0.8) translateY(30px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
   h1 { font-size: 26px; text-align: center; margin-bottom: 8px; }
   .nickname { font-size: 18px; color: #0071e3; font-weight: bold; text-align: center; margin-bottom: 18px; }
 
-  /* 寒冰+流光边框特效 */
-  .quote-box, .account-box {
-    position: relative;
-    padding: 16px;
-    border-radius: 0;
-    margin: 12px 0;
-    text-align: center;
-    overflow: hidden;
-    border: 2px solid #a78bfa;
-    box-shadow: 3px 3px 0 #f0e6ff;
-  }
-  .quote-box { background: #fdf2f8; border: 2px solid #a78bfa; }
+  /* 寒冰边框 */
+  .quote-box, .account-box { position: relative; padding: 16px; border-radius: 0; margin: 12px 0; text-align: center; overflow: hidden; border: 2px solid #a78bfa; box-shadow: 3px 3px 0 #f0e6ff; }
   .account-box { background: #e8f4f8; border: 2px solid #3b82f6; font-family: monospace; box-shadow: 3px 3px 0 #e0f2fe; }
-
-  /* 寒冰流光 */
-  .quote-box::after, .account-box::after {
-    content: '';
-    position: absolute;
-    top: -3px; left: -3px; right: -3px; bottom: -3px;
-    background: linear-gradient(45deg, #00ffff, #ffffff, #0088ff, #ffffff);
-    background-size: 400% 400%;
-    border-radius: 0;
-    z-index: -1;
-    animation: borderGlow 3s linear infinite;
-    filter: blur(4px);
-  }
+  .quote-box::after, .account-box::after { content: ''; position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px; background: linear-gradient(45deg, #00ffff, #ffffff, #0088ff, #ffffff); background-size: 400% 400%; border-radius: 0; z-index: -1; animation: borderGlow 3s linear infinite; filter: blur(4px); }
   @keyframes borderGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
   .box-title { font-size: 13px; color: #666; margin-bottom: 6px; font-weight: bold; }
   .item { text-align: center; margin: 6px 0; font-size: 15px; }
 
-  .link-btn {
-    display: block;
-    margin-top: 12px;
-    padding: 12px;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 0;
-    font-weight: bold;
-    position: relative;
-    overflow: hidden;
-    transition: 0.3s;
-    border: none;
-    box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-  }
-  .link-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
-    background: rgba(255,255,255,0.3);
-    border-radius: 0;
-    transform: translate(-50%, -50%);
-    transition: 0.5s;
-  }
+  .link-btn { display: block; margin-top: 12px; padding: 12px; color: white; text-align: center; text-decoration: none; border-radius: 0; font-weight: bold; position: relative; overflow: hidden; transition: 0.3s; border: none; box-shadow: 2px 2px 0 rgba(0,0,0,0.2); }
+  .link-btn::before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background: rgba(255,255,255,0.3); border-radius: 0; transform: translate(-50%, -50%); transition: 0.5s; }
   .link-btn:hover::before { width: 300px; height: 300px; }
   .link-btn:hover { transform: scale(1.03); }
 
-  .bilibili { background: #FB7299; }
-  .namemc   { background: #4DDB9F; }
-  .youtube  { background: #FF0000; }
-  .discord  { background: #5865F2; }
-
+  .bilibili { background: #FB7299; } .namemc { background: #4DDB9F; } .youtube { background: #FF0000; } .discord { background: #5865F2; }
   .visitor-count { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
 
-  /* 彩蛋：末影龙特效 */
-  .enderdragon {
-    position: fixed;
-    width: 200px;
-    height: 150px;
-    background: url('https://zh.minecraft.wiki/images/Ender_Dragon.gif') no-repeat center/contain;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    animation: dragonFly 8s linear forwards;
-  }
-  @keyframes dragonFly {
-    0% { 
-      opacity: 1;
-      transform: translate(-200px, -100px) scale(0.5) rotate(10deg);
-    }
-    25% { 
-      transform: translate(calc(50vw - 100px), calc(20vh)) scale(1) rotate(0deg);
-    }
-    75% { 
-      transform: translate(calc(100vw + 200px), calc(40vh)) scale(1.2) rotate(-10deg);
-    }
-    100% { 
-      opacity: 0;
-      transform: translate(calc(100vw + 300px), calc(50vh)) scale(1.5) rotate(-15deg);
-    }
-  }
-
-  /* 彩蛋触发提示（隐藏） */
-  .easter-egg-tip {
-    position: fixed;
-    bottom: 80px;
-    left: 20px;
-    background: rgba(0,0,0,0.8);
-    color: #00ff00;
-    padding: 6px 12px;
-    font-size: 12px;
-    border-radius: 0;
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-  }
+  /* 末影龙彩蛋 */
+  .enderdragon { position: fixed; width: 200px; height: 150px; background: url('https://zh.minecraft.wiki/images/Ender_Dragon.gif') no-repeat center/contain; z-index: 9999; opacity: 0; pointer-events: none; animation: dragonFly 8s linear forwards; }
+  @keyframes dragonFly { 0% { opacity: 1; transform: translate(-200px, -100px) scale(0.5) rotate(10deg); } 25% { transform: translate(calc(50vw - 100px), calc(20vh)) scale(1) rotate(0deg); } 75% { transform: translate(calc(100vw + 200px), calc(40vh)) scale(1.2) rotate(-10deg); } 100% { opacity: 0; transform: translate(calc(100vw + 300px), calc(50vh)) scale(1.5) rotate(-15deg); } }
+  .easter-egg-tip { position: fixed; bottom: 110px; left: 20px; background: rgba(0,0,0,0.8); color: #00ff00; padding: 6px 12px; font-size: 12px; border-radius: 0; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
 </style>
 </head>
-
 <body>
+<div class="bg-container"></div>
+<div class="bg-overlay"></div>
 <div class="aurora"></div>
+
 <div class="easter-egg-tip">双击卡片召唤末影龙🐉</div>
 
 <div class="snow-control">
@@ -275,6 +127,13 @@
   <button class="snow-btn" onclick="setSnow('big')">大雪</button>
 </div>
 
+<!-- 新增：背景音按钮 -->
+<button class="bg-music-btn" onclick="toggleBackgroundMusic()">🎵 播放背景音</button>
+
+<!-- 新增：实时时钟 -->
+<div class="digital-clock" id="clock">00:00:00</div>
+
+<!-- 音乐播放器 -->
 <div class="music-player">
   <h4>🎵 本地音乐播放器</h4>
   <div class="music-controls">
@@ -293,6 +152,8 @@
     <button class="lang-btn" onclick="show('cn')">简体</button>
     <button class="lang-btn" onclick="show('tw')">繁體</button>
     <button class="lang-btn" onclick="show('en')">English</button>
+    <!-- 新增：背景切换按钮 -->
+    <button class="lang-btn" onclick="cycleBackgrounds()">🔄 换背景</button>
   </div>
 
   <div class="content active" id="cn">
@@ -304,201 +165,3 @@
     </div>
     <div class="account-box">
       <div class="box-title">今日 MC 账号</div>
-      <div id="a_cn">获取中...</div>
-    </div>
-    <div class="item">喜欢编程、麦块</div>
-    <div class="item">正在学习更多技术</div>
-  </div>
-
-  <div class="content" id="tw">
-    <h1>個人主頁</h1>
-    <div class="nickname">7y</div>
-    <div class="quote-box">
-      <div class="box-title">今日名言</div>
-      <div id="q_tw">加載中...</div>
-    </div>
-    <div class="account-box">
-      <div class="box-title">今日 MC 賬號</div>
-      <div id="a_tw">獲取中...</div>
-    </div>
-    <div class="item">喜歡程式、麥塊</div>
-    <div class="item">正在學習更多技術</div>
-  </div>
-
-  <div class="content" id="en">
-    <h1>Profile</h1>
-    <div class="nickname">7y</div>
-    <div class="quote-box">
-      <div class="box-title">Today's Quote</div>
-      <div id="q_en">Loading...</div>
-    </div>
-    <div class="account-box">
-      <div class="box-title">Today's MC Account</div>
-      <div id="a_en">Fetching...</div>
-    </div>
-    <div class="item">I love coding & Minecraft</div>
-    <div class="item">Learning new skills</div>
-  </div>
-
-  <a href="https://space.bilibili.com/1247576850" class="link-btn bilibili" target="_blank">Bilibili</a>
-  <a href="https://zh-cn.namemc.com/profile/Xooo777yoooX.1" class="link-btn namemc" target="_blank">Namemc</a>
-  <a href="https://www.youtube.com/channel/UCf2P1XYSConYpQ5TpDTB5NA" class="link-btn youtube" target="_blank">Youtube</a>
-  <a href="https://discord.gg/BRZnvkqZKw" class="link-btn discord" target="_blank">Discord</a>
-
-  <div class="visitor-count">
-    本站访问量: <img src="https://profile-counter.glitch.me/wpkooo/count.svg" alt="访问量">
-  </div>
-</div>
-
-<script>
-  // 雪花
-  let snowLevel = 'small';
-  let snows = [];
-  function clearSnows() { snows.forEach(s => s.remove()); snows = []; }
-  function setSnow(level) {
-    snowLevel = level;
-    document.querySelectorAll('.snow-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.snow-btn[onclick="setSnow('${level}')"]`).classList.add('active');
-    clearSnows(); makeSnow();
-  }
-  function makeSnow() {
-    let count, sizeMin, sizeMax, speedMin, speedMax, swayRange;
-    if (snowLevel === 'small') { count = 100; sizeMin = 1; sizeMax = 2; speedMin = 12; speedMax = 20; swayRange = 80; }
-    else if (snowLevel === 'medium') { count = 180; sizeMin = 2; sizeMax = 4; speedMin = 10; speedMax = 18; swayRange = 120; }
-    else { count = 250; sizeMin = 3; sizeMax = 7; speedMin = 8; speedMax = 16; swayRange = 150; }
-    for (let i = 0; i < count; i++) {
-      const s = document.createElement('div');
-      s.classList.add('snowflake');
-      const size = Math.random() * (sizeMax - sizeMin) + sizeMin;
-      const left = Math.random() * 100;
-      const sway = (Math.random() - 0.5) * swayRange;
-      const dur = Math.random() * (speedMax - speedMin) + speedMin;
-      const delay = Math.random() * dur;
-      s.style.width = size + 'px';
-      s.style.height = size + 'px';
-      s.style.left = left + '%';
-      s.style.setProperty('--sway', sway);
-      s.style.animation = `snowfall ${dur}s linear infinite`;
-      s.style.animationDelay = `-${delay}s`;
-      document.body.appendChild(s);
-      snows.push(s);
-    }
-  }
-
-  // 音乐
-  const audio = new Audio();
-  let playing = false;
-  document.getElementById('file').addEventListener('change', e => {
-    const url = URL.createObjectURL(e.target.files[0]);
-    audio.src = url; audio.volume = 0.4;
-  });
-  function togglePlay() {
-    if (!audio.src) return;
-    if (playing) { audio.pause(); playing = false; document.querySelector('.play-btn').textContent = '播放'; }
-    else { audio.play(); playing = true; document.querySelector('.play-btn').textContent = '暂停'; }
-  }
-  audio.addEventListener('timeupdate', () => {
-    const p = (audio.currentTime / audio.duration) * 100 || 0;
-    document.getElementById('progress').value = p;
-    const m = Math.floor(audio.currentTime / 60);
-    const s = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
-    document.getElementById('time').textContent = `${m}:${s}`;
-  });
-  document.getElementById('progress').addEventListener('input', e => {
-    if (!audio.duration) return;
-    audio.currentTime = (e.target.value / 100) * audio.duration;
-  });
-  document.getElementById('vol').addEventListener('input', e => {
-    audio.volume = e.target.value / 100;
-  });
-  audio.addEventListener('ended', () => {
-    playing = false;
-    document.querySelector('.play-btn').textContent = '播放';
-  });
-
-  // 语言切换 + 震动
-  function show(lang) {
-    document.querySelectorAll('.content').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.lang-btn').forEach(x => x.classList.remove('active'));
-    document.getElementById(lang).classList.add('active');
-    document.querySelectorAll('.lang-btn')[lang === 'cn' ? 0 : lang === 'tw' ? 1 : 2].classList.add('active');
-    
-    // 震动特效
-    document.querySelector('.container').classList.add('shake');
-    setTimeout(() => {
-      document.querySelector('.container').classList.remove('shake');
-    }, 300);
-  }
-
-  // 名言 & 账号
-  function loadQuote() {
-    fetch('https://v1.hitokoto.cn')
-      .then(r => r.json())
-      .then(d => {
-        const t = `"${d.hitokoto}" —— ${d.from || '未知'}`;
-        document.getElementById('q_cn').innerText = t;
-        document.getElementById('q_tw').innerText = t;
-        document.getElementById('q_en').innerText = d.hitokoto;
-      });
-  }
-  function loadAccount() {
-    const url = 'https://api.allorigins.win/get?url=' + encodeURIComponent('http://123.207.6.187/get.php?code=250722-136823478060658');
-    fetch(url)
-      .then(r => r.json())
-      .then(d => {
-        const txt = d.contents || '获取失败';
-        document.getElementById('a_cn').innerText = txt;
-        document.getElementById('a_tw').innerText = txt;
-        document.getElementById('a_en').innerText = txt;
-      });
-  }
-
-  // 彩蛋：双击召唤末影龙
-  let doubleClickTimer = null;
-  document.getElementById('main-card').addEventListener('click', () => {
-    // 显示彩蛋提示（3秒后消失）
-    document.querySelector('.easter-egg-tip').style.opacity = 1;
-    setTimeout(() => {
-      document.querySelector('.easter-egg-tip').style.opacity = 0;
-    }, 3000);
-
-    // 双击检测
-    if (doubleClickTimer) {
-      clearTimeout(doubleClickTimer);
-      doubleClickTimer = null;
-      
-      // 召唤末影龙
-      summonEnderDragon();
-    } else {
-      doubleClickTimer = setTimeout(() => {
-        doubleClickTimer = null;
-      }, 300);
-    }
-  });
-
-  function summonEnderDragon() {
-    // 创建末影龙元素
-    const dragon = document.createElement('div');
-    dragon.classList.add('enderdragon');
-    document.body.appendChild(dragon);
-
-    // 播放龙吼音效（可选）
-    const roar = new Audio('https://assets.mojang.com/sounds/minecraft/sounds/mob/enderdragon/growl1.ogg');
-    roar.volume = 0.5;
-    roar.play();
-
-    // 8秒后移除龙元素
-    setTimeout(() => {
-      dragon.remove();
-    }, 8000);
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    makeSnow();
-    loadQuote();
-    loadAccount();
-  });
-</script>
-</body>
-</html>
-
