@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>7y </title>
+<title>7y</title>
 <link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif" type="image/gif">
 <style>
   * {
@@ -219,7 +219,7 @@
 
   .visitor-count { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
 
-  /* 彩蛋：末影龙特效 */
+  /* 彩蛋：末影龙特效（已修改，从卡片中心飞出） */
   .enderdragon {
     position: fixed;
     width: 200px;
@@ -233,7 +233,8 @@
   @keyframes dragonFly {
     0% { 
       opacity: 1;
-      transform: translate(-200px, -100px) scale(0.5) rotate(10deg);
+      /* 从卡片中心开始，而不是最左边 */
+      transform: translate(calc(50vw - 100px), calc(50vh - 75px)) scale(0.5) rotate(0deg);
     }
     25% { 
       transform: translate(calc(50vw - 100px), calc(20vh)) scale(1) rotate(0deg);
@@ -477,4 +478,3 @@
 </script>
 </body>
 </html>
-
