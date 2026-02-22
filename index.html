@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>7y</title>
+<title>7y 的 MC 专属主页</title>
 <link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif" type="image/gif">
 <style>
   * {
@@ -233,7 +233,6 @@
   @keyframes dragonFly {
     0% { 
       opacity: 1;
-      /* 从卡片中心开始，而不是最左边 */
       transform: translate(calc(50vw - 100px), calc(50vh - 75px)) scale(0.5) rotate(0deg);
     }
     25% { 
@@ -346,8 +345,9 @@
   <a href="https://www.youtube.com/channel/UCf2P1XYSConYpQ5TpDTB5NA" class="link-btn youtube" target="_blank">Youtube</a>
   <a href="https://discord.gg/BRZnvkqZKw" class="link-btn discord" target="_blank">Discord</a>
 
+  <!-- 修复后的访问量统计 -->
   <div class="visitor-count">
-    本站访问量: <img src="https://profile-counter.glitch.me/wpkooo/count.svg" alt="访问量">
+    本站访问量: <span id="busuanzi_value_site_pv"></span>
   </div>
 </div>
 
@@ -476,5 +476,7 @@
     loadAccount();
   });
 </script>
+<!-- 引入不蒜子统计脚本 -->
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
