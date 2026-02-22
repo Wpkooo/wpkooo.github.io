@@ -218,11 +218,56 @@
   .discord  { background: #5865F2; }
 
   .visitor-count { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+
+  /* 彩蛋：末影龙特效 */
+  .enderdragon {
+    position: fixed;
+    width: 200px;
+    height: 150px;
+    background: url('https://zh.minecraft.wiki/images/Ender_Dragon.gif') no-repeat center/contain;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    animation: dragonFly 8s linear forwards;
+  }
+  @keyframes dragonFly {
+    0% { 
+      opacity: 1;
+      transform: translate(-200px, -100px) scale(0.5) rotate(10deg);
+    }
+    25% { 
+      transform: translate(calc(50vw - 100px), calc(20vh)) scale(1) rotate(0deg);
+    }
+    75% { 
+      transform: translate(calc(100vw + 200px), calc(40vh)) scale(1.2) rotate(-10deg);
+    }
+    100% { 
+      opacity: 0;
+      transform: translate(calc(100vw + 300px), calc(50vh)) scale(1.5) rotate(-15deg);
+    }
+  }
+
+  /* 彩蛋触发提示（隐藏） */
+  .easter-egg-tip {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    color: #00ff00;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 0;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
 </style>
 </head>
 
 <body>
 <div class="aurora"></div>
+<div class="easter-egg-tip">双击卡片召唤末影龙🐉</div>
 
 <div class="snow-control">
   <button class="snow-btn active" onclick="setSnow('small')">小雪</button>
@@ -243,7 +288,7 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container" id="main-card">
   <div class="lang-switch">
     <button class="lang-btn" onclick="show('cn')">简体</button>
     <button class="lang-btn" onclick="show('tw')">繁體</button>
@@ -406,6 +451,46 @@
         document.getElementById('a_tw').innerText = txt;
         document.getElementById('a_en').innerText = txt;
       });
+  }
+
+  // 彩蛋：双击召唤末影龙
+  let doubleClickTimer = null;
+  document.getElementById('main-card').addEventListener('click', () => {
+    // 显示彩蛋提示（3秒后消失）
+    document.querySelector('.easter-egg-tip').style.opacity = 1;
+    setTimeout(() => {
+      document.querySelector('.easter-egg-tip').style.opacity = 0;
+    }, 3000);
+
+    // 双击检测
+    if (doubleClickTimer) {
+      clearTimeout(doubleClickTimer);
+      doubleClickTimer = null;
+      
+      // 召唤末影龙
+      summonEnderDragon();
+    } else {
+      doubleClickTimer = setTimeout(() => {
+        doubleClickTimer = null;
+      }, 300);
+    }
+  });
+
+  function summonEnderDragon() {
+    // 创建末影龙元素
+    const dragon = document.createElement('div');
+    dragon.classList.add('enderdragon');
+    document.body.appendChild(dragon);
+
+    // 播放龙吼音效（可选）
+    const roar = new Audio('https://assets.mojang.com/sounds/minecraft/sounds/mob/enderdragon/growl1.ogg');
+    roar.volume = 0.5;
+    roar.play();
+
+    // 8秒后移除龙元素
+    setTimeout(() => {
+      dragon.remove();
+    }, 8000);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
