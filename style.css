@@ -1,41 +1,45 @@
-/* 先改 body 的基础字体 */
-body {
-  font-family: 'Merriweather', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  /* 其他样式不变，保留你原来的背景、动画等 */
-  background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+.container {
+  width: 100%;
+  max-width: 480px;
+  /* 3. 毛玻璃 */
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 40px 35px;
+  border-radius: 0;
+  border: 1px solid rgba(255,255,255,0.3);
+  
+  animation: floatCard 4s ease-in-out infinite alternate;
   position: relative;
+  z-index: 2;
   overflow: hidden;
-  animation: breathBg 8s ease-in-out infinite alternate;
 }
 
-/* 再改标题和昵称的字体（加粗更醒目） */
-h1 { 
-  font-size: 26px; 
-  text-align: center; 
-  margin-bottom: 8px; 
-  font-family: 'Merriweather', serif;
-  font-weight: 700; /* 加粗 */
+/* 1. 边缘流光 */
+.container::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
+  background: linear-gradient(45deg, #00ffff, #ff00ff, #ff8800, #00ff88, #00ffff);
+  background-size: 400% 400%;
+  z-index: -1;
+  animation: borderFlow 6s linear infinite;
+  filter: blur(8px);
+  opacity: 0.7;
 }
-.nickname { 
-  font-size: 18px; 
-  color: #0071e3; 
-  font-weight: bold; 
-  text-align: center; 
-  margin-bottom: 18px; 
-  font-family: 'Merriweather', serif;
-  font-weight: 600;
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* 按钮、提示文字等也统一字体（可选，让整体更协调） */
-.snow-btn, .lang-btn, .play-btn {
-  font-family: 'Merriweather', serif;
+/* 4. 文字渐显 */
+.content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
 }
-.box-title, .item, .visitor-count {
-  font-family: 'Merriweather', serif;
+.content.active {
+  opacity: 1;
+  transform: translateY(0);
 }
