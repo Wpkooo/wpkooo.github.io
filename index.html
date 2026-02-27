@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <title>7y‘s Home</title>
 <link rel="icon" href="https://zh.minecraft.wiki/images/Invicon_End_Crystal.gif" type="image/gif">
-<!-- 你的专属字体链接 -->
+
+<!-- 加载所有需要的字体（MedievalSharp + Merriweather + Playfair Display） -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
 <style>
   * {
     margin: 0;
@@ -15,8 +17,10 @@
     box-sizing: border-box;
   }
 
+  /* 字体切换核心样式：3种独立字体 */
+  /* 1. 默认：MedievalSharp（中世纪体） */
   body {
-    font-family: 'Merriweather', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'MedievalSharp', cursive;
     background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center center fixed;
     background-size: cover;
     display: flex;
@@ -27,6 +31,14 @@
     position: relative;
     overflow: hidden;
     animation: breathBg 8s ease-in-out infinite alternate;
+  }
+  /* 2. Merriweather（经典优雅体） */
+  body.font-merriweather {
+    font-family: 'Merriweather', serif;
+  }
+  /* 3. Playfair Display（复古排版体） */
+  body.font-playfair {
+    font-family: 'Playfair Display', serif;
   }
 
   @keyframes breathBg {
@@ -98,7 +110,6 @@
     cursor: pointer;
     transition: 0.2s;
     box-shadow: 2px 2px 0 #ccc;
-    font-family: 'Merriweather', serif;
   }
   .snow-btn:hover { background: #fff; }
   .snow-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
@@ -116,10 +127,10 @@
     box-shadow: 3px 3px 0 #ccc;
     border: 1px solid #ddd;
   }
-  .music-player h4 { font-size: 14px; margin-bottom: 8px; text-align: center; color: #333; font-weight: 600; font-family: 'Merriweather', serif; }
+  .music-player h4 { font-size: 14px; margin-bottom: 8px; text-align: center; color: #333; font-weight: 600; }
   .music-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   .file-input { flex: 1; font-size: 12px; border-radius: 0; border: 1px solid #ddd; padding: 4px; }
-  .play-btn { padding: 6px 10px; border: none; border-radius: 0; background: #0071e3; color: white; cursor: pointer; box-shadow: 2px 2px 0 #005cc8; font-family: 'Merriweather', serif; }
+  .play-btn { padding: 6px 10px; border: none; border-radius: 0; background: #0071e3; color: white; cursor: pointer; box-shadow: 2px 2px 0 #005cc8; }
   .progress { width: 100%; height: 6px; appearance: none; border-radius: 0; background: #ddd; margin-bottom: 6px; border: 1px solid #ccc; }
   .progress::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; border-radius: 0; background: #0071e3; border: 1px solid #005cc8; }
   .volume { width: 80px; border-radius: 0; }
@@ -143,9 +154,14 @@
   @keyframes shake { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2px, 2px); } 50% { transform: translate(2px, -2px); } 75% { transform: translate(-2px, -2px); } }
   .shake { animation: shake 0.3s; }
 
-  .lang-switch { text-align: center; margin-bottom: 20px; }
-  .lang-btn { padding: 6px 10px; margin: 0 4px; border: none; border-radius: 0; background: #eee; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #ddd; font-family: 'Merriweather', serif; }
+  .lang-switch { text-align: center; margin-bottom: 15px; }
+  .lang-btn { padding: 6px 10px; margin: 0 4px; border: none; border-radius: 0; background: #eee; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #ddd; }
   .lang-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
+
+  /* 字体切换按钮样式 */
+  .font-switch { text-align: center; margin-bottom: 20px; }
+  .font-btn { padding: 6px 8px; margin: 0 3px; border: none; border-radius: 0; background: #eee; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #ddd; font-size: 13px; }
+  .font-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
 
   /* 文字炸裂 */
   .content { display: none; opacity: 0; transform: scale(0.8) translateY(30px); }
@@ -156,20 +172,17 @@
   }
 
   h1 { 
-    font-size: 26px; 
+    font-size: 28px; /* 中世纪体稍微放大更美观 */
     text-align: center; 
     margin-bottom: 8px; 
-    font-family: 'Merriweather', serif;
     font-weight: 700;
   }
   .nickname { 
-    font-size: 18px; 
+    font-size: 20px; 
     color: #0071e3; 
     font-weight: bold; 
     text-align: center; 
     margin-bottom: 18px; 
-    font-family: 'Merriweather', serif;
-    font-weight: 600;
   }
 
   /* 寒冰+流光边框特效 */
@@ -200,8 +213,8 @@
   }
   @keyframes borderGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-  .box-title { font-size: 13px; color: #666; margin-bottom: 6px; font-weight: bold; font-family: 'Merriweather', serif; }
-  .item { text-align: center; margin: 6px 0; font-size: 15px; font-family: 'Merriweather', serif; }
+  .box-title { font-size: 14px; color: #666; margin-bottom: 6px; font-weight: bold; }
+  .item { text-align: center; margin: 6px 0; font-size: 16px; }
 
   .link-btn {
     display: block;
@@ -217,7 +230,6 @@
     transition: 0.3s;
     border: none;
     box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-    font-family: 'Merriweather', serif;
   }
   .link-btn::before {
     content: '';
@@ -237,7 +249,7 @@
   .youtube  { background: #FF0000; }
   .discord  { background: #5865F2; }
 
-  .visitor-count { text-align: center; margin-top: 20px; font-size: 14px; color: #666; font-family: 'Merriweather', serif; }
+  .visitor-count { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
 
   /* 彩蛋：末影龙特效（已修改，从卡片中心飞出） */
   .enderdragon {
@@ -281,7 +293,6 @@
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
-    font-family: 'Merriweather', serif;
   }
 </style>
 </head>
@@ -314,6 +325,13 @@
     <button class="lang-btn active" onclick="show('cn')">简体</button>
     <button class="lang-btn" onclick="show('tw')">繁體</button>
     <button class="lang-btn" onclick="show('en')">English</button>
+  </div>
+
+  <!-- 字体切换按钮（对应三种独立字体） -->
+  <div class="font-switch">
+    <button class="font-btn active" onclick="changeFont('medieval')">中世纪体</button>
+    <button class="font-btn" onclick="changeFont('merriweather')">经典优雅体</button>
+    <button class="font-btn" onclick="changeFont('playfair')">复古排版体</button>
   </div>
 
   <div class="content active" id="cn">
@@ -514,6 +532,33 @@
     }
   }
 
+  // 字体切换核心功能（三种独立字体）
+  function changeFont(fontType) {
+    // 1. 移除所有字体类名
+    document.body.classList.remove('font-merriweather', 'font-playfair');
+    // 2. 移除所有字体按钮的active样式
+    document.querySelectorAll('.font-btn').forEach(btn => btn.classList.remove('active'));
+    
+    // 3. 根据选择的字体添加对应类名
+    if (fontType === 'merriweather') {
+      document.body.classList.add('font-merriweather');
+      document.querySelectorAll('.font-btn')[1].classList.add('active');
+    } else if (fontType === 'playfair') {
+      document.body.classList.add('font-playfair');
+      document.querySelectorAll('.font-btn')[2].classList.add('active');
+    } else {
+      // 默认：MedievalSharp 中世纪体
+      document.querySelectorAll('.font-btn')[0].classList.add('active');
+    }
+    
+    // 4. 加震动特效
+    const container = document.querySelector('.container');
+    if (container) {
+      container.classList.add('shake');
+      setTimeout(() => container.classList.remove('shake'), 300);
+    }
+  }
+
   // 名言 & MC账号加载
   function loadQuote() {
     fetch('https://v1.hitokoto.cn')
@@ -634,7 +679,7 @@
     const coze = new CozeWebSDK.WebChatClient({
       config: {
         botId: '7372902214339821599',
-        title: 'ai (练习)',
+        title: 'ai',
         placeholder: '问我问题吧～',
       },
       ui: {
