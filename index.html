@@ -355,18 +355,33 @@
   // 雪花核心功能
   let snowLevel = 'small';
   let snows = [];
-  function clearSnows() { snows.forEach(s => s.remove()); snows = []; }
+  function clearSnows() { 
+    if (snows.length > 0) {
+      snows.forEach(s => {
+        try { s.remove(); } catch(e) {}
+      }); 
+      snows = []; 
+    }
+  }
+  
   function setSnow(level) {
     snowLevel = level;
     document.querySelectorAll('.snow-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.snow-btn[onclick="setSnow('${level}')"]`).classList.add('active');
-    clearSnows(); makeSnow();
+    const targetBtn = document.querySelector(`.snow-btn[onclick="setSnow('${level}')"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+    clearSnows(); 
+    makeSnow();
   }
+  
   function makeSnow() {
     let count, sizeMin, sizeMax, speedMin, speedMax, swayRange;
     if (snowLevel === 'small') { count = 100; sizeMin = 1; sizeMax = 2; speedMin = 12; speedMax = 20; swayRange = 80; }
     else if (snowLevel === 'medium') { count = 180; sizeMin = 2; sizeMax = 4; speedMin = 10; speedMax = 18; swayRange = 120; }
     else { count = 250; sizeMin = 3; sizeMax = 7; speedMin = 8; speedMax = 16; swayRange = 150; }
+    
+    // 限制雪花数量，避免性能问题
+    count = Math.min(count, 300);
+    
     for (let i = 0; i < count; i++) {
       const s = document.createElement('div');
       s.classList.add('snowflake');
@@ -375,12 +390,14 @@
       const sway = (Math.random() - 0.5) * swayRange;
       const dur = Math.random() * (speedMax - speedMin) + speedMin;
       const delay = Math.random() * dur;
+      
       s.style.width = size + 'px';
       s.style.height = size + 'px';
       s.style.left = left + '%';
       s.style.setProperty('--sway', sway);
       s.style.animation = `snowfall ${dur}s linear infinite`;
       s.style.animationDelay = `-${delay}s`;
+      
       document.body.appendChild(s);
       snows.push(s);
     }
@@ -389,30 +406,70 @@
   // 本地音乐播放器核心
   const audio = new Audio();
   let playing = false;
+  
   document.getElementById('file').addEventListener('change', e => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    // 释放之前的URL，避免内存泄漏
+    if (audio.src) {
+      try { URL.revokeObjectURL(audio.src); } catch(e) {}
+    }
     const url = URL.createObjectURL(e.target.files[0]);
-    audio.src = url; audio.volume = 0.4;
+    audio.src = url; 
+    audio.volume = 0.4;
+    // 重置进度条
+    document.getElementById('progress').value = 0;
+    document.getElementById('time').textContent = '0:00';
   });
+  
   function togglePlay() {
-    if (!audio.src) return;
-    if (playing) { audio.pause(); playing = false; document.querySelector('.play-btn').textContent = '播放'; }
-    else { audio.play(); playing = true; document.querySelector('.play-btn').textContent = '暂停'; }
+    if (!audio.src) {
+      alert('请先选择音频文件！');
+      return;
+    }
+    if (playing) { 
+      audio.pause(); 
+      playing = false; 
+      document.querySelector('.play-btn').textContent = '播放'; 
+    } else { 
+      audio.play().catch(err => {
+        alert('播放失败：' + err.message);
+        playing = false;
+        document.querySelector('.play-btn').textContent = '播放';
+      }); 
+      playing = true; 
+      document.querySelector('.play-btn').textContent = '暂停'; 
+    }
   }
+  
   audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
     const p = (audio.currentTime / audio.duration) * 100 || 0;
     document.getElementById('progress').value = p;
     const m = Math.floor(audio.currentTime / 60);
     const s = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
     document.getElementById('time').textContent = `${m}:${s}`;
   });
+  
   document.getElementById('progress').addEventListener('input', e => {
     if (!audio.duration) return;
     audio.currentTime = (e.target.value / 100) * audio.duration;
   });
+  
   document.getElementById('vol').addEventListener('input', e => {
     audio.volume = e.target.value / 100;
   });
+  
   audio.addEventListener('ended', () => {
+    playing = false;
+    document.querySelector('.play-btn').textContent = '播放';
+    // 重置进度条
+    document.getElementById('progress').value = 0;
+    document.getElementById('time').textContent = '0:00';
+  });
+  
+  // 音频播放错误处理
+  audio.addEventListener('error', (e) => {
+    alert('音频播放错误，请选择有效的音频文件！');
     playing = false;
     document.querySelector('.play-btn').textContent = '播放';
   });
@@ -421,49 +478,102 @@
   function show(lang) {
     document.querySelectorAll('.content').forEach(x => x.classList.remove('active'));
     document.querySelectorAll('.lang-btn').forEach(x => x.classList.remove('active'));
-    document.getElementById(lang).classList.add('active');
-    document.querySelectorAll('.lang-btn')[lang === 'cn' ? 0 : lang === 'tw' ? 1 : 2].classList.add('active');
-    document.querySelector('.container').classList.add('shake');
-    setTimeout(() => document.querySelector('.container').classList.remove('shake'), 300);
+    
+    const contentEl = document.getElementById(lang);
+    if (contentEl) contentEl.classList.add('active');
+    
+    const btnIndex = lang === 'cn' ? 0 : lang === 'tw' ? 1 : 2;
+    const langBtns = document.querySelectorAll('.lang-btn');
+    if (langBtns[btnIndex]) langBtns[btnIndex].classList.add('active');
+    
+    const container = document.querySelector('.container');
+    if (container) {
+      container.classList.add('shake');
+      setTimeout(() => container.classList.remove('shake'), 300);
+    }
   }
 
   // 名言 & MC账号加载
   function loadQuote() {
     fetch('https://v1.hitokoto.cn')
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error('请求失败');
+        return r.json();
+      })
       .then(d => {
         const t = `"${d.hitokoto}" —— ${d.from || '未知'}`;
         document.getElementById('q_cn').innerText = t;
         document.getElementById('q_tw').innerText = t;
         document.getElementById('q_en').innerText = d.hitokoto;
+      })
+      .catch(err => {
+        console.error('加载名言失败:', err);
+        document.getElementById('q_cn').innerText = '人生没有白走的路，每一步都算数。—— 未知';
+        document.getElementById('q_tw').innerText = '人生沒有白走的路，每一步都算數。—— 未知';
+        document.getElementById('q_en').innerText = 'No road in life is in vain, every step counts.';
       });
   }
+  
   function loadAccount() {
     const url = 'https://api.allorigins.win/get?url=' + encodeURIComponent('http://123.207.6.187/get.php?code=250722-136823478060658');
     fetch(url)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error('请求失败');
+        return r.json();
+      })
       .then(d => {
         const txt = d.contents || '获取失败';
         document.getElementById('a_cn').innerText = txt;
         document.getElementById('a_tw').innerText = txt;
         document.getElementById('a_en').innerText = txt;
+      })
+      .catch(err => {
+        console.error('加载MC账号失败:', err);
+        const errorText = '暂时无法获取，请稍后再试';
+        document.getElementById('a_cn').innerText = errorText;
+        document.getElementById('a_tw').innerText = errorText;
+        document.getElementById('a_en').innerText = 'Temporarily unavailable, please try again later';
       });
   }
 
   // 末影龙彩蛋
   let doubleClickTimer = null;
+  let dragonCooldown = false; // 冷却机制，避免频繁触发
+  
   document.getElementById('main-card').addEventListener('click', () => {
-    document.querySelector('.easter-egg-tip').style.opacity = 1;
-    setTimeout(() => document.querySelector('.easter-egg-tip').style.opacity = 0, 3000);
+    // 显示提示
+    const tipEl = document.querySelector('.easter-egg-tip');
+    if (tipEl) {
+      tipEl.style.opacity = 1;
+      setTimeout(() => tipEl.style.opacity = 0, 3000);
+    }
+    
+    // 双击检测
     if (doubleClickTimer) {
       clearTimeout(doubleClickTimer);
       doubleClickTimer = null;
+      
+      // 冷却检查
+      if (dragonCooldown) return;
+      dragonCooldown = true;
+      setTimeout(() => dragonCooldown = false, 10000); // 10秒冷却
+      
+      // 创建末影龙
       const dragon = document.createElement('div');
       dragon.classList.add('enderdragon');
       document.body.appendChild(dragon);
-      const roar = new Audio('https://assets.mojang.com/sounds/minecraft/sounds/mob/enderdragon/growl1.ogg');
-      roar.volume = 0.5; roar.play();
-      setTimeout(() => dragon.remove(), 8000);
+      
+      // 播放音效
+      try {
+        const roar = new Audio('https://assets.mojang.com/sounds/minecraft/sounds/mob/enderdragon/growl1.ogg');
+        roar.volume = 0.5; 
+        roar.play().catch(() => {}); // 静默失败，避免控制台报错
+      } catch (e) {}
+      
+      // 移除末影龙元素
+      setTimeout(() => {
+        try { dragon.remove(); } catch(e) {}
+      }, 8000);
     } else {
       doubleClickTimer = setTimeout(() => doubleClickTimer = null, 300);
     }
@@ -471,15 +581,29 @@
 
   // 页面初始化
   document.addEventListener('DOMContentLoaded', () => {
-    makeSnow();
-    loadQuote();
-    loadAccount();
+    // 延迟初始化，提升页面加载体验
+    setTimeout(() => {
+      makeSnow();
+      loadQuote();
+      loadAccount();
+    }, 500);
+    
+    // 窗口大小变化时重新生成雪花
+    window.addEventListener('resize', () => {
+      clearSnows();
+      setTimeout(() => makeSnow(), 300);
+    });
+    
+    // 清理资源
+    window.addEventListener('beforeunload', () => {
+      clearSnows();
+      if (audio.src) {
+        try { URL.revokeObjectURL(audio.src); } catch(e) {}
+      }
+    });
   });
 </script>
 <!-- 引入不蒜子统计脚本 -->
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
-
-
-
