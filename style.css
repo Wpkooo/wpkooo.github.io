@@ -1,0 +1,41 @@
+/* 先改 body 的基础字体 */
+body {
+  font-family: 'Merriweather', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* 其他样式不变，保留你原来的背景、动画等 */
+  background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  animation: breathBg 8s ease-in-out infinite alternate;
+}
+
+/* 再改标题和昵称的字体（加粗更醒目） */
+h1 { 
+  font-size: 26px; 
+  text-align: center; 
+  margin-bottom: 8px; 
+  font-family: 'Merriweather', serif;
+  font-weight: 700; /* 加粗 */
+}
+.nickname { 
+  font-size: 18px; 
+  color: #0071e3; 
+  font-weight: bold; 
+  text-align: center; 
+  margin-bottom: 18px; 
+  font-family: 'Merriweather', serif;
+  font-weight: 600;
+}
+
+/* 按钮、提示文字等也统一字体（可选，让整体更协调） */
+.snow-btn, .lang-btn, .play-btn {
+  font-family: 'Merriweather', serif;
+}
+.box-title, .item, .visitor-count {
+  font-family: 'Merriweather', serif;
+}
