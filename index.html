@@ -18,7 +18,7 @@
   }
 
   /* 字体切换核心样式：3种独立字体 */
-  /* 1. 默认：MedievalSharp（中世纪体） */
+  /* 1. 默认：MedievalSharp */
   body {
     font-family: 'MedievalSharp', cursive;
     background: url("https://image2url.com/r2/default/files/1771746886279-7fa8b6e9-9501-4429-9881-390006a9294e.png") no-repeat center center fixed;
@@ -32,11 +32,11 @@
     overflow: hidden;
     animation: breathBg 8s ease-in-out infinite alternate;
   }
-  /* 2. Merriweather（经典优雅体） */
+  /* 2. Merriweather */
   body.font-merriweather {
     font-family: 'Merriweather', serif;
   }
-  /* 3. Playfair Display（复古排版体） */
+  /* 3. Playfair Display */
   body.font-playfair {
     font-family: 'Playfair Display', serif;
   }
@@ -92,11 +92,19 @@
     100% { transform: translate(calc(var(--sway)*1px), 100vh) rotate(360deg); opacity: 0; }
   }
 
-  .snow-control {
+  /* 左上角控制区：雪花+字体按钮组合 */
+  .top-left-controls {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 20px;
     z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* 雪花按钮样式 */
+  .snow-control {
     display: flex;
     gap: 8px;
   }
@@ -113,6 +121,27 @@
   }
   .snow-btn:hover { background: #fff; }
   .snow-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
+
+  /* 字体切换按钮样式（左上角） */
+  .font-switch {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap; /* 防止按钮超出屏幕 */
+  }
+  .font-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 0;
+    background: rgba(255,255,255,0.85);
+    color: #333;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 2px 2px 0 #ccc;
+    font-size: 12px;
+    white-space: nowrap; /* 防止文字换行 */
+  }
+  .font-btn:hover { background: #fff; }
+  .font-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
 
   /* 音乐播放器：左下角方正 */
   .music-player {
@@ -158,11 +187,6 @@
   .lang-btn { padding: 6px 10px; margin: 0 4px; border: none; border-radius: 0; background: #eee; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #ddd; }
   .lang-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
 
-  /* 字体切换按钮样式 */
-  .font-switch { text-align: center; margin-bottom: 20px; }
-  .font-btn { padding: 6px 8px; margin: 0 3px; border: none; border-radius: 0; background: #eee; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #ddd; font-size: 13px; }
-  .font-btn.active { background: #0071e3; color: white; box-shadow: 2px 2px 0 #005cc8; }
-
   /* 文字炸裂 */
   .content { display: none; opacity: 0; transform: scale(0.8) translateY(30px); }
   .content.active { display: block; animation: explodeIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
@@ -172,7 +196,7 @@
   }
 
   h1 { 
-    font-size: 28px; /* 中世纪体稍微放大更美观 */
+    font-size: 28px;
     text-align: center; 
     margin-bottom: 8px; 
     font-weight: 700;
@@ -301,10 +325,21 @@
 <div class="aurora"></div>
 <div class="easter-egg-tip">双击卡片召唤末影龙🐉</div>
 
-<div class="snow-control">
-  <button class="snow-btn active" onclick="setSnow('small')">小雪</button>
-  <button class="snow-btn" onclick="setSnow('medium')">中雪</button>
-  <button class="snow-btn" onclick="setSnow('big')">大雪</button>
+<!-- 左上角控制区：雪花按钮 + 字体按钮 -->
+<div class="top-left-controls">
+  <!-- 雪花控制按钮 -->
+  <div class="snow-control">
+    <button class="snow-btn active" onclick="setSnow('small')">小雪</button>
+    <button class="snow-btn" onclick="setSnow('medium')">中雪</button>
+    <button class="snow-btn" onclick="setSnow('big')">大雪</button>
+  </div>
+  
+  <!-- 字体切换按钮（原始英文名 + 左上角） -->
+  <div class="font-switch">
+    <button class="font-btn active" onclick="changeFont('medieval')">MedievalSharp</button>
+    <button class="font-btn" onclick="changeFont('merriweather')">Merriweather</button>
+    <button class="font-btn" onclick="changeFont('playfair')">Playfair Display</button>
+  </div>
 </div>
 
 <div class="music-player">
@@ -325,13 +360,6 @@
     <button class="lang-btn active" onclick="show('cn')">简体</button>
     <button class="lang-btn" onclick="show('tw')">繁體</button>
     <button class="lang-btn" onclick="show('en')">English</button>
-  </div>
-
-  <!-- 字体切换按钮（对应三种独立字体） -->
-  <div class="font-switch">
-    <button class="font-btn active" onclick="changeFont('medieval')">中世纪体</button>
-    <button class="font-btn" onclick="changeFont('merriweather')">经典优雅体</button>
-    <button class="font-btn" onclick="changeFont('playfair')">复古排版体</button>
   </div>
 
   <div class="content active" id="cn">
@@ -547,7 +575,7 @@
       document.body.classList.add('font-playfair');
       document.querySelectorAll('.font-btn')[2].classList.add('active');
     } else {
-      // 默认：MedievalSharp 中世纪体
+      // 默认：MedievalSharp
       document.querySelectorAll('.font-btn')[0].classList.add('active');
     }
     
